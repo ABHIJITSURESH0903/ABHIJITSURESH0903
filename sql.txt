@@ -1,0 +1,201 @@
+SQL> create table s1(sid number(10) primary key, fname varchar2(10), lname varchar2(10), age number(10));
+
+Table created.
+
+SQL> create table dept1(sid number(10) primary key, dname varchar2(10));
+
+Table created.
+
+SQL> insert into s1 values(1,'A','B',10);
+
+1 row created.
+
+SQL> insert into s1 values(2,'C','D',15);
+
+1 row created.
+
+SQL> insert into s1 values(3,'E','F',20);
+
+1 row created.
+
+SQL> insert into s1 values(4,'G','H',17);
+
+1 row created.
+
+SQL> insert into s1 values(5,'I','J',18);
+
+1 row created.
+
+SQL> insert into s1 values(6,'K','L',19);
+
+1 row created.
+
+SQL> insert into dept1 values(1,'cs');
+
+1 row created.
+
+SQL> insert into dept1 values(2,'maths');
+
+1 row created.
+
+SQL> insert into dept1 values(3,'maths');
+
+1 row created.
+
+SQL> insert into dept1 values(4,'civil');
+
+1 row created.
+
+SQL> insert into dept1 values(5,'civil');
+
+1 row created.
+
+SQL> insert into dept1 values(6,'cs');
+
+1 row created.
+
+SQL> select * from s1;
+
+       SID FNAME      LNAME             AGE
+---------- ---------- ---------- ----------
+         1 A          B                  10
+         2 C          D                  15
+         3 E          F                  20
+         4 G          H                  17
+         5 I          J                  18
+         6 K          L                  19
+
+6 rows selected.
+
+SQL> select * from dept1;
+
+       SID DNAME
+---------- ----------
+         1 cs
+         2 maths
+         3 maths
+         4 civil
+         5 civil
+         6 cs
+
+6 rows selected.
+
+SQL> alter table s1 add constraint fk1 foreign key(sid) references dept1(sid);
+
+Table altered.
+
+SQL> desc s1
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ SID                                       NOT NULL NUMBER(10)
+ FNAME                                              VARCHAR2(10)
+ LNAME                                              VARCHAR2(10)
+ AGE                                                NUMBER(10)
+
+SQL> desc dept1
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ SID                                       NOT NULL NUMBER(10)
+ DNAME                                              VARCHAR2(10)
+
+SQL> insert into s1 values(7,'M','N',26);
+insert into s1 values(7,'M','N',26)
+*
+ERROR at line 1:
+ORA-02291: integrity constraint (SYSTEM.FK1) violated - parent key not found
+
+
+SQL> select * from s1;
+
+       SID FNAME      LNAME             AGE
+---------- ---------- ---------- ----------
+         1 A          B                  10
+         2 C          D                  15
+         3 E          F                  20
+         4 G          H                  17
+         5 I          J                  18
+         6 K          L                  19
+
+6 rows selected.
+
+SQL> select * from dept1;
+
+       SID DNAME
+---------- ----------
+         1 cs
+         2 maths
+         3 maths
+         4 civil
+         5 civil
+         6 cs
+
+6 rows selected.
+
+SQL> create table contact(sid number(10), mail varchar2(20),  mobile number(10));
+
+Table created.
+
+
+SQL> create table contact(sid number(10) primary key, mail varchar2(20),  mobile number(10));
+
+Table created.
+
+SQL> insert into contact values(1,'abc@gmail.com',1234567890);
+
+1 row created.
+
+SQL> insert into contact values(2,'def@gmail.com',7894651320);
+
+1 row created.
+
+SQL> insert into contact values(3,'ghi@gmail.com',4567891230);
+
+1 row created.
+
+SQL> insert into contact values(4,'jkl@gmail.com',3216549870);
+
+1 row created.
+
+SQL> insert into contact values(5,'mno@gmail.com',6549873120);
+
+1 row created.
+
+SQL> insert into contact values(6,'pqr@gmail.com',9873214560);
+
+1 row created.
+
+SQL> select * from contact;
+
+       SID MAIL                     MOBILE
+---------- -------------------- ----------
+         1 abc@gmail.com        1234567890
+         2 def@gmail.com        7894651320
+         3 ghi@gmail.com        4567891230
+         4 jkl@gmail.com        3216549870
+         5 mno@gmail.com        6549873120
+         6 pqr@gmail.com        9873214560
+
+6 rows selected.
+
+
+SQL> alter table contact add constraint fk2 foreign key(sid) references dept1(sid);
+
+Table altered.
+
+
+SQL> create table v1 as select s.sid,s.fname,d.dname,c.mail from s1 s, dept1 d, contact c where s.sid=d.sid and s.sid = c.sid;
+
+Table created.
+
+SQL> select * from v1;
+
+       SID FNAME      DNAME      MAIL
+---------- ---------- ---------- --------------------
+         1 A          cs         abc@gmail.com
+         2 C          maths      def@gmail.com
+         3 E          maths      ghi@gmail.com
+         4 G          civil      jkl@gmail.com
+         5 I          civil      mno@gmail.com
+         6 K          cs         pqr@gmail.com
+
+6 rows selected.
